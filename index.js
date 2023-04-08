@@ -28,6 +28,8 @@ app.get('/', (req, res) => {
 app.get('/api/users', async (req, res) => {
   const users = await User.find();
 
+  // sgdsdf
+
   res.send(users);
 })
 
