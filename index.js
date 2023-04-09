@@ -119,7 +119,8 @@ app.get('/api/users/:_id/logs', async (req, res) => {
 // POST to /api/users/:_id/exercises
 app.post('/api/users/:_id/exercises', async (req, res) => {
   let { description, duration, date } = req.body;
-  const userId = req.body[":_id"];
+  // const userId = req.body[":_id"];
+  const userId = req.params['_id'];
   const foundUser = await User.findById(userId);
 
   if (!foundUser) {
@@ -127,14 +128,14 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       message: "No User Found!"
     })
   }
-  else {
+  else{
     if (!date) {
       date = new Date();
     }
     else {
       date = new Date(date);
     }
-
+  
     await Exercise.create({
       username: foundUser.username,
       description,
@@ -142,14 +143,15 @@ app.post('/api/users/:_id/exercises', async (req, res) => {
       date: date,
       userId: userId
     })
-
+  
     res.send({
+      _id: userId,
       username: foundUser.username,
-      description,
-      duration,
       date: date.toDateString(),
-      _id: userId
+      duration: Number(duration),
+      description
     });
+
   }
 })
 
